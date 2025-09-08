@@ -1,0 +1,60 @@
+version: "3.5"
+
+services:
+    nginx:
+        image: nginx:latest
+        restart: no
+        tty: true
+        volumes:
+            - ./:/var/www
+            - ./_docker/nginx/conf.d:/etc/nginx/conf.d
+        ports:
+            - 8881:80
+        depends_on:
+            - app_symfony_vue
+        container_name: webserver_symfony_vue
+        networks:
+            - symfony-vue-network
+
+    app_symfony_vue:
+        build:
+            context: .
+            dockerfile: _docker/app/Dockerfile
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - db_symfony_vue
+        container_name: app_symfony_vue
+        restart: no
+        environment:
+            SERVICE_NAME: app
+            SERVICE_TAGS: dev
+        working_dir: /var/www
+        tty: true
+        networks:
+            - symfony-vue-network
+
+    db_symfony_vue:
+      image: postgres:15-alpine
+      restart: unless-stopped
+      volumes:
+        - ./tmp/db:/var/lib/postgresql/data
+      environment:
+        POSTGRES_DB: symfony_vue
+        POSTGRES_PASSWORD: test
+        POSTGRES_USER: test
+      ports:
+        - 5433:5432
+      container_name: db_symfony_vue
+      tty: true
+      networks:
+        - symfony-vue-network
+
+#Docker Networks
+networks:
+    symfony-vue-network:
+        driver: bridge
+#Volumes
+volumes:
+    dbdata:
+        driver: local
