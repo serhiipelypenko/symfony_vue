@@ -13,6 +13,17 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        admin_security_area:
+            pattern: ^/admin
+            lazy: true
+            provider: app_user_provider
+            custom_authenticator: App\Security\Admin\LoginFormAuthenticator
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /admin/
+            logout:
+                path: admin_security_logout
         main:
             lazy: true
             provider: app_user_provider
@@ -39,6 +50,8 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+         - { path: ^/admin/login }
+         - { path: ^/admin, roles: ROLE_ADMIN  }
          - { path: ^/profile, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }
 
