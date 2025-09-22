@@ -3,9 +3,11 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
+use App\Entity\ProductImage;
 use App\Form\EditProductFormType;
 use App\Form\Handler\ProductFormHandler;
 use App\Repository\ProductRepository;
+use App\Utils\Manager\ProductManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +31,10 @@ final class ProductController extends AbstractController
     public function edit(Request $request, EntityManagerInterface $entityManager,
         ProductFormHandler $productFormHandler, Product $product = null): Response
     {
+        if(!$product){
+            $product = new Product();
+        }
+
         $form = $this->createForm(EditProductFormType::class, $product);
         $form->handleRequest($request);
 
@@ -38,15 +44,19 @@ final class ProductController extends AbstractController
             return $this->redirectToRoute('admin_product_edit', ['id' => $product->getId()]);
         }
 
+        $images = $product->getProductImages()
+            ? $product->getProductImages()->getValues()
+            : [];
         return $this->render('admin/product/edit.html.twig', [
-            'images' => $product->getProductImages()->getValues(),
+            'images' => $images,
             'product' => $product,
             'form' => $form->createView()]);
     }
 
     #[Route('/delete/{id}', name: 'delete')]
-    public function delete(): Response
+    public function delete(Product $product, ProductManager $productManager): Response
     {
-
+        $productManager->remove($product);
+        return $this->redirectToRoute('admin_product_list');
     }
 }
