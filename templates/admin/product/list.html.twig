@@ -34,7 +34,7 @@
                             <td>{{ product.price }}</td>
                             <td>{{ product.quantity }}</td>
                             <td>
-                                {#{% set images = product.getProductImages().getValues() %}
+                                {% set images = product.getProductImages().getValues() %}
                                 {% if images|length %}
                                     {% set image = images[0] %}
                                     <img
@@ -42,7 +42,7 @@
                                         style="width: 250px"
                                         alt="{{ image.filenameMiddle }}"
                                     >
-                                {% endif %}#}
+                                {% endif %}
                             </td>
                             <td>
                                 {#<i class="fas fa-check fa-sm" style="color: {% if product.isPublished %}green{% else %}lightgray{% endif %};"></i>#}
