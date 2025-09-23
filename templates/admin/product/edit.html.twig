@@ -163,7 +163,7 @@
         </div>
     </div>
 
-    {% if product %}
+    {% if product.id %}
         {% include 'admin/_embed/_utils/_modal.html.twig' with {
             'id': 'approveDeleteModal',
             'title': 'Are you sure?',

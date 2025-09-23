@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -16,6 +18,10 @@ class Product
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    private ?Uuid $uuid;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -49,6 +55,7 @@ class Product
     private ?string $slug = null;
 
     public function __construct(){
+        $this->uuid = Uuid::v4();
         $this->createAt = new \DateTimeImmutable();
         $this->isPublish = false;
         $this->isDeleted = false;
@@ -57,6 +64,11 @@ class Product
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): ?string
+    {
+        return $this->uuid;
     }
 
     public function getTitle(): ?string
