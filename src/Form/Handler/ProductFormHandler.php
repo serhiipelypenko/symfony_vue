@@ -31,6 +31,7 @@ readonly class ProductFormHandler{
         $product->setDescription($editProductModel->description);
         $product->setIsPublish($editProductModel->isPublish);
         $product->setIsDeleted($editProductModel->isDeleted);
+        $product->setCategory($editProductModel->category);
 
         $this->productManager->save($product);
         $newImageFile = $form->get('newImage')->getData();
