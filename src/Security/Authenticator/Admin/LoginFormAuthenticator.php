@@ -49,9 +49,9 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $user = $token->getUser();
 
         // Check if the user has ROLE_ADMIN
-        if (!in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+        /*if (!in_array('ROLE_ADMIN', $user->getRoles(), true)) {
             throw new AuthenticationException('Only administrators can log in here.');
-        }
+        }*/
 
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
