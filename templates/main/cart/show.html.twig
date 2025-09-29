@@ -70,7 +70,7 @@
                                         Total: <strong>${{ cartPriceTotal }}</strong>
                                     </div>
 
-                                    <a class="btn btn-success m-3 text-white text-uppercase" >Make order</a>
+                                    <a href="{{ path('main_cart_create') }}" class="btn btn-success m-3 text-white text-uppercase" >Make order</a>
                                     {% else %}
                                         <div class="alert alert-info">Your cart is empty</div>
                                     {% endif %}
