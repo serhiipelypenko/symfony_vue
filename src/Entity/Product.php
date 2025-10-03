@@ -2,8 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\GetCollection;
@@ -20,30 +25,41 @@ use Symfony\Component\Uid\Uuid;
 
 #[ApiResource(operations: [
     new Get(normalizationContext: ['groups' => ['product:read']]),
-    new Post(),
+    new Post(normalizationContext: ['groups' => ['product:write']], security: "is_granted('ROLE_ADMIN')"),
     new Put(),
-    new GetCollection(normalizationContext: ['groups' => ['product:list']])])]
+    new Patch(normalizationContext:  ['groups' => ['product:list:write']], security: "is_granted('ROLE_ADMIN')"),
+    new GetCollection(normalizationContext: ['groups' => ['product:list']])],
+    order: ['id' => 'DESC'], paginationItemsPerPage: 3)]
+#[ApiFilter(BooleanFilter::class, properties: ["isPublished"])]
+
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
 {
-    #[Groups(['product:read','product:list'])]
+ /*   #[ApiProperty(
+        identifier: false
+    )]*/
+    #[Groups(['product:list'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-
+    /*#[ApiProperty(
+        identifier: true
+    )]*/
+    #[Groups(['product:read'])]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     private ?Uuid $uuid;
 
-    #[Groups(['product:read','product:list'])]
+    #[Groups(['product:read','product:list','product:write','product:list:write'])]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[Groups(['product:read','product:list'])]
+    #[Groups(['product:read','product:list','product:write','product:list:write'])]
     #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
     private ?string $price = null;
 
+    #[Groups(['product:read','product:list','product:write','product:list:write'])]
     #[ORM\Column]
     private ?int $quantity = null;
 
@@ -69,6 +85,7 @@ class Product
     #[ORM\Column(length: 128, unique: true, nullable: true)]
     private ?string $slug = null;
 
+    #[Groups(['product:read','product:list','product:write','product:list:write'])]
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Category $category = null;
 
