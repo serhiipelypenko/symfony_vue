@@ -2,6 +2,10 @@
 
 {% block title_detailed %}Edit Order{% endblock %}
 
+{% block stylesheets %}
+    {{ encore_entry_link_tags('appAdminOrder') }}
+{% endblock %}
+
 {% block body %}
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -82,6 +86,7 @@
                     Products
                 </div>
                 <div class="col-md-11 pl-5">
+                    <div id="app"></div>
                     {% for orderProduct in order.orderProducts %}
                         <div>
                            {% set product = orderProduct.product %}
@@ -119,4 +124,8 @@
             'btnText': 'Delete row'
         } %}
     {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+        {{ encore_entry_script_tags('appAdminOrder') }}
 {% endblock %}

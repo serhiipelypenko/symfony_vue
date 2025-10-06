@@ -23,6 +23,8 @@ Encore
     .addEntry('section-main', './assets/section-main.js')
     .addEntry('section-admin', './assets/section-admin.js')
 
+    .addEntry('appAdminOrder', './assets/js/section/admin/admin-order/app.js')
+
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
@@ -47,6 +49,8 @@ Encore
     .enableSassLoader()
     // Displays build status system notifications to the user
     // .enableBuildNotifications()
+
+    .enableVueLoader()
 
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
