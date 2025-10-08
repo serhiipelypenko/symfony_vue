@@ -51,8 +51,27 @@ final class OrderController extends AbstractController
             $this->addFlash('warning','Something went wrong, please check your form!');
         }
 
+        $orderProducts = array();
+
+        foreach ($order->getOrderProducts()->getValues() as $product){
+            $orderProducts[] = [
+                'id' => $product->getId(),
+                'product' => [
+                    'id' => $product->getProduct()->getId(),
+                    'title' => $product->getProduct()->getTitle(),
+                    'category' => [
+                        'id' => $product->getProduct()->getCategory()->getId(),
+                        'title' => $product->getProduct()->getCategory()->getTitle(),
+                    ],
+                ],
+                'pricePerOne' => $product->getPricePerOne(),
+                'quantity' => $product->getQuantity(),
+            ];
+        }
+
         return $this->render('admin/order/edit.html.twig', [
             'order' => $order,
+            'orderProducts' => $orderProducts,
             'form' => $form->createView()]);
     }
 
