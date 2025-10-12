@@ -30,8 +30,10 @@ use Symfony\Component\Uid\Uuid;
     new Patch(normalizationContext:  ['groups' => ['product:list:write']], security: "is_granted('ROLE_ADMIN')"),
     new GetCollection(normalizationContext: ['groups' => ['product:list']])],
     order: ['id' => 'DESC'], paginationItemsPerPage: 3)]
-#[ApiFilter(BooleanFilter::class, properties: ["isPublished"])]
-
+#[ApiFilter(BooleanFilter::class, properties: ["isPublish"])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'category' => 'exact', // Filter by category (e.g., category.id or category.slug)
+])]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
 {

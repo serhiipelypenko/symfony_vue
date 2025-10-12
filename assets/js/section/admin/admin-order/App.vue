@@ -1,5 +1,6 @@
 <template>
 <div class="table-additional-selection">
+    <OrderProductAdd/>
    <hr/>
 <OrderProductItem
     v-for="(orderProduct,index) in staticStore.orderProducts"
@@ -11,16 +12,20 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 import OrderProductItem from "./components/OrderProductItem.vue";
+import OrderProductAdd from "./components/OrderProductAdd.vue";
 
 export default {
-    components: {OrderProductItem},
+    components: {OrderProductAdd, OrderProductItem},
     created () {
-        console.log(window.staticStore);
+        this.getCategories();
     },
     computed: {
         ...mapState("products", ["staticStore"]),
+    },
+    methods: {
+        ...mapActions("products", ["getCategories"]),
     }
 }
 </script>
