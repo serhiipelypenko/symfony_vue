@@ -1,7 +1,7 @@
 api_platform:
-    title: Hello API Platform
+    title: My test api platform
     version: 1.0.0
     defaults:
-        stateless: true
+        #stateless: true
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']

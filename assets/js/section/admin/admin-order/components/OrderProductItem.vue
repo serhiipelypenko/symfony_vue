@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 import {getUrlViewProduct} from "../../../../utils/url-generator";
 
 export default {
@@ -55,13 +55,15 @@ export default {
         }
     },
     methods:{
+        ...mapActions('products', ["removeOrderProduct"]),
         viewDetails(event){
             event.preventDefault();
             const url = getUrlViewProduct(this.staticStore.url.viewProduct,this.orderProduct.product.id);
             window.open(url, "_blank").focus();
         },
-        remove(){
-
+        remove(event){
+            event.preventDefault();
+            this.removeOrderProduct(this.orderProduct.id);
         }
     }
 }

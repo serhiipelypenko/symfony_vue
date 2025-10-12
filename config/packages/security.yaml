@@ -14,7 +14,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         admin_security_area:
-            pattern: ^/admin
+            pattern: ^(/admin|/api)
             lazy: true
             provider: app_user_provider
             custom_authenticator: App\Security\Authenticator\Admin\LoginFormAuthenticator
