@@ -29,7 +29,7 @@ use Doctrine\Persistence\ObjectRepository;
         }
     }
 
-    public function createOrderFromCart(Cart $cart, User $user): Order
+    public function createOrderFromCart(Cart $cart, User $user): void
     {
         $order = new Order();
         $order->setOwner($user);
@@ -58,8 +58,19 @@ use Doctrine\Persistence\ObjectRepository;
         $this->entityManager->flush();
 
         $this->cartManager->remove($cart);
-        dd($order);
 
+    }
+
+    public function recalculateOrderTotalPrice(Order $order){
+        $orderTotalPrice = 0;
+
+        foreach ($order->getOrderProducts()->getValues() as $orderProduct){
+            $orderTotalPrice += $orderProduct->getPricePerOne() * $orderProduct->getQuantity();
+            $order->addOrderProduct($orderProduct);
+            $this->entityManager->persist($orderProduct);
+        }
+
+        $order->setTotalPrice($orderTotalPrice);
     }
 
      public function save(object $entity){

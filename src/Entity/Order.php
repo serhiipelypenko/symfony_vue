@@ -11,9 +11,10 @@ use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(operations: [
-    new Get(normalizationContext: ['groups' => ['order:list']]),
+    new Get(normalizationContext: ['groups' => ['order:item']]),
     new Post(normalizationContext: ['groups' => ['order:write']], security: "is_granted('ROLE_ADMIN')"),
     new GetCollection(normalizationContext: ['groups' => ['order:list']])]
 )]
@@ -21,6 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: '`order`')]
 class Order
 {
+    #[Groups(['order:item'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -33,9 +35,11 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
+    #[Groups(['order:item'])]
     #[ORM\Column]
     private ?int $status = null;
 
+    #[Groups(['order:item'])]
     #[ORM\Column(nullable: true)]
     private ?float $totalPrice = null;
 
@@ -48,6 +52,7 @@ class Order
     /**
      * @var Collection<int, OrderProduct>
      */
+    #[Groups(['order:item'])]
     #[ORM\OneToMany(targetEntity: OrderProduct::class, mappedBy: 'appOrder')]
     private Collection $orderProducts;
 

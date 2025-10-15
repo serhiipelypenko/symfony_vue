@@ -19,13 +19,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
 {
-    #[Groups(['category:read','category:list','product:list','product:read'])]
+    #[Groups(['category:read','category:list','product:list','product:read','order:item'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['category:read','category:list'])]
+    #[Groups(['category:read','category:list','order:item'])]
     #[ORM\Column(length: 100)]
     private ?string $title = null;
 

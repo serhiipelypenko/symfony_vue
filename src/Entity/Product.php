@@ -40,7 +40,7 @@ class Product
  /*   #[ApiProperty(
         identifier: false
     )]*/
-    #[Groups(['product:list'])]
+    #[Groups(['product:list','order:item'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -49,19 +49,19 @@ class Product
     /*#[ApiProperty(
         identifier: true
     )]*/
-    #[Groups(['product:read'])]
+    #[Groups(['product:read','order:item'])]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     private ?Uuid $uuid;
 
-    #[Groups(['product:read','product:list','product:write','product:list:write'])]
+    #[Groups(['product:read','product:list','product:write','product:list:write','order:item'])]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[Groups(['product:read','product:list','product:write','product:list:write'])]
+    #[Groups(['product:read','product:list','product:write','product:list:write','order:item'])]
     #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
     private ?string $price = null;
 
-    #[Groups(['product:read','product:list','product:write','product:list:write'])]
+    #[Groups(['product:read','product:list','product:write','product:list:write','order:item'])]
     #[ORM\Column]
     private ?int $quantity = null;
 
@@ -87,7 +87,7 @@ class Product
     #[ORM\Column(length: 128, unique: true, nullable: true)]
     private ?string $slug = null;
 
-    #[Groups(['product:read','product:list','product:write','product:list:write'])]
+    #[Groups(['product:read','product:list','product:write','product:list:write','order:item'])]
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Category $category = null;
 

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -22,7 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: OrderProductRepository::class)]
 class OrderProduct
 {
-    #[Groups(['order_product:list'])]
+    #[Groups(['order_product:list','order:item'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -32,15 +33,18 @@ class OrderProduct
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $appOrder = null;
 
+    #[Groups(['order:item'])]
     #[ORM\ManyToOne(inversedBy: 'orderProducts')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
+    #[Groups(['order:item'])]
     #[ORM\Column]
     private ?int $quantity = null;
 
+    #[Groups(['order:item'])]
     #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
-    private ?string $pricePerOne = null;
+    private ?float $pricePerOne = null;
 
     public function getId(): ?int
     {
@@ -83,12 +87,12 @@ class OrderProduct
         return $this;
     }
 
-    public function getPricePerOne(): ?string
+    public function getPricePerOne(): ?float
     {
         return $this->pricePerOne;
     }
 
-    public function setPricePerOne(string $pricePerOne): static
+    public function setPricePerOne(float $pricePerOne): static
     {
         $this->pricePerOne = $pricePerOne;
 
