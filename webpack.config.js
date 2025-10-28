@@ -24,6 +24,7 @@ Encore
     .addEntry('section-admin', './assets/section-admin.js')
 
     .addEntry('appAdminOrder', './assets/js/section/admin/admin-order/app.js')
+    .addEntry('appMainCartShow', './assets/js/section/main/main-cart-show/app.js')
 
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.

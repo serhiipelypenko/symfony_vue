@@ -2,19 +2,31 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\CartRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(operations: [
+    new Get(normalizationContext: ['groups' => ['cart:item']]),
+    new Post(normalizationContext: ['groups' => ['cart:write']], security: "is_granted('ROLE_ADMIN')"),
+    new GetCollection(normalizationContext: ['groups' => ['cart:list']])]
+)]
 #[ORM\Entity(repositoryClass: CartRepository::class)]
 class Cart
 {
+    #[Groups(['cart:item', 'cart:list'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['cart:item', 'cart:list'])]
     #[ORM\Column(length: 255)]
     private ?string $sessionId = null;
 
@@ -24,6 +36,7 @@ class Cart
     /**
      * @var Collection<int, CartProduct>
      */
+    #[Groups(['cart:item', 'cart:list'])]
     #[ORM\OneToMany(targetEntity: CartProduct::class, mappedBy: 'cart', orphanRemoval: true)]
     private Collection $cartProducts;
 

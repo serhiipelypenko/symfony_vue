@@ -40,7 +40,7 @@ class Product
  /*   #[ApiProperty(
         identifier: false
     )]*/
-    #[Groups(['product:list','order:item'])]
+    #[Groups(['product:list','order:item','cart:item', 'cart:list', 'cart_product:item', 'cart_product:list'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -49,19 +49,19 @@ class Product
     /*#[ApiProperty(
         identifier: true
     )]*/
-    #[Groups(['product:read','order:item'])]
+    #[Groups(['product:read','order:item','cart:item', 'cart:list', 'cart_product:item', 'cart_product:list'])]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     private ?Uuid $uuid;
 
-    #[Groups(['product:read','product:list','product:write','product:list:write','order:item'])]
+    #[Groups(['product:read','product:list','product:write','product:list:write','order:item','cart:item', 'cart:list', 'cart_product:item', 'cart_product:list'])]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[Groups(['product:read','product:list','product:write','product:list:write','order:item'])]
+    #[Groups(['product:read','product:list','product:write','product:list:write','order:item','cart:item', 'cart:list', 'cart_product:item', 'cart_product:list'])]
     #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
     private ?string $price = null;
 
-    #[Groups(['product:read','product:list','product:write','product:list:write','order:item'])]
+    #[Groups(['product:read','product:list','product:write','product:list:write','order:item','cart:item', 'cart:list', 'cart_product:item', 'cart_product:list'])]
     #[ORM\Column]
     private ?int $quantity = null;
 
@@ -87,7 +87,7 @@ class Product
     #[ORM\Column(length: 128, unique: true, nullable: true)]
     private ?string $slug = null;
 
-    #[Groups(['product:read','product:list','product:write','product:list:write','order:item'])]
+    #[Groups(['product:read','product:list','product:write','product:list:write','order:item','cart:item', 'cart:list', 'cart_product:item', 'cart_product:list'])]
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Category $category = null;
 
