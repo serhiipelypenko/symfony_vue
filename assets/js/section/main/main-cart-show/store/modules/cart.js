@@ -7,7 +7,9 @@ const state = () => ({
     cart: {},
     staticStore: {
         url: {
-            apiCart: window.staticStore.urlCart
+            apiCart: window.staticStore.urlCart,
+            viewProduct: window.staticStore.urlViewProduct,
+            assetImageProducts: window.staticStore.urlAssetImageProducts,
         }
     }
 })
@@ -22,7 +24,8 @@ const actions = {
 
         if(result.data && result.status === StatusCodes.OK) {
             //commit('setCart', result.data["hydra:member"]);
-            commit('setCart', result.data.member);
+            console.log( result.data.member[0]);
+            commit('setCart', result.data.member[0]);
         }
     },
 };

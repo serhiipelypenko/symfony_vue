@@ -30,7 +30,9 @@
             window.staticStore = {};
         }
 
-        window.staticStore.urlCart = "{{ path('_api_/carts{._format}_get_collection') }}"
+        window.staticStore.urlCart = "{{ path('_api_/carts{._format}_get_collection') }}";
+        window.staticStore.urlViewProduct = "{{ path('main_product_show_blank') }}";
+        window.staticStore.urlAssetImageProducts = "{{ asset('uploads/images/products') }}";
     </script>
     {{ encore_entry_script_tags('appMainCartShow') }}
 {% endblock %}

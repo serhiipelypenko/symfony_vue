@@ -80,6 +80,7 @@ class Product
     /**
      * @var Collection<int, ProductImage>
      */
+    #[Groups(['product:list','order:item','cart:item', 'cart:list', 'cart_product:item', 'cart_product:list'])]
     #[ORM\OneToMany(targetEntity: ProductImage::class, mappedBy: 'product', cascade: ['persist'],  orphanRemoval: true)]
     private Collection $productImages;
 
