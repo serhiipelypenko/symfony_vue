@@ -25,7 +25,9 @@
         type="number"
         class="form-control"
         min="1"
-        step="1">
+        step="1"
+        @focusout="updateQuantity"
+        >
     </td>
     <td class="total-col">
         ${{ productPrice }}
@@ -34,7 +36,7 @@
         <a href="#"
         class="btn-remove"
         title="Remove product"
-        @click="removeCartProduct">
+        @click="removeCartProduct(cartProduct.id)">
             x
         </a>
     </td>
@@ -42,7 +44,7 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default {
     data(){
@@ -56,6 +58,9 @@ export default {
             type: Object,
             default: () => {}
         }
+    },
+    created () {
+        this.quantity = this.cartProduct.quantity
     },
     computed:{
         ...mapState("cart", ["staticStore"]),
@@ -71,6 +76,7 @@ export default {
         }
     },
     methods:{
+        ...mapActions("cart", ["removeCartProduct","updateCartProductQuantity"]),
         getUrlProductImage(productImage){
             return (
                 this.staticStore.url.assetImageProducts +
@@ -80,8 +86,12 @@ export default {
                 productImage.filenameSmall
             );
         },
-        removeCartProduct(){
-            return true;
+        updateQuantity(){
+            const payload = {
+                cartProductId: this.cartProduct.id,
+                quantity: this.quantity
+            };
+            this.updateCartProductQuantity(payload);
         }
     }
 }

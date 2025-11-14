@@ -52,10 +52,7 @@ final class CartApiController extends AbstractController
         $entityManage->flush();
 
         return new JsonResponse([
-            'success' => false,
-            'data' => [
-                'test' => 123
-            ]
+            'success' => false
         ]);
     }
 }
