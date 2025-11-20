@@ -18,7 +18,7 @@
 <script>
 import CartProductList from "./components/CartProductList.vue";
 import CartTotalPrice from "./components/CartTotalPrice.vue";
-import {mapActions, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import Alert from "./components/Alert.vue";
 
 export default {
@@ -29,16 +29,14 @@ export default {
         this.setAlert( {type: 'warning', message: 'You can see your cart!'});
     },
     computed: {
+        ...mapState("cart", ["isSentForm"]),
         showCartContent(){
-            return true;
+            return !this.isSentForm;
         }
     },
     methods: {
-        ...mapActions("cart", ["getCart"]),
+        ...mapActions("cart", ["getCart","makeOrder"]),
         ...mapMutations("cart", ["setAlert"]),
-        makeOrder(){
-            return true;
-        }
     }
 }
 </script>

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
@@ -15,6 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(operations: [
     new Get(normalizationContext: ['groups' => ['cart:item']]),
     new Post(normalizationContext: ['groups' => ['cart:write']], security: "is_granted('ROLE_ADMIN')"),
+    new Delete(),
     new GetCollection(normalizationContext: ['groups' => ['cart:list']])]
 )]
 #[ORM\Entity(repositoryClass: CartRepository::class)]
