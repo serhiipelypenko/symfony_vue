@@ -2,6 +2,7 @@
     <div class="row">
         <div class="col-lg-12 order-block">
             <div class="order-content">
+                <Alert />
                 <div v-if="showCartContent">
                     <CartProductList/>
                     <CartTotalPrice/>
@@ -17,13 +18,15 @@
 <script>
 import CartProductList from "./components/CartProductList.vue";
 import CartTotalPrice from "./components/CartTotalPrice.vue";
-import {mapActions} from "vuex";
+import {mapActions, mapMutations} from "vuex";
+import Alert from "./components/Alert.vue";
 
 export default {
     name: "App",
-    components: {CartTotalPrice, CartProductList},
+    components: {Alert, CartTotalPrice, CartProductList},
     created() {
-        this.getCart()
+        this.getCart();
+        this.setAlert( {type: 'warning', message: 'You can see your cart!'});
     },
     computed: {
         showCartContent(){
@@ -32,6 +35,7 @@ export default {
     },
     methods: {
         ...mapActions("cart", ["getCart"]),
+        ...mapMutations("cart", ["setAlert"]),
         makeOrder(){
             return true;
         }
