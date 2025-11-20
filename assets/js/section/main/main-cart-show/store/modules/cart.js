@@ -49,6 +49,11 @@ const actions = {
         if(result.data && result.status === StatusCodes.OK) {
             //commit('setCart', result.data["hydra:member"]);
             commit('setCart', result.data.member[0]);
+        }else{
+            commit('setAlert', {
+                type: 'info',
+                message: 'Your cart is empty...'
+            });
         }
     },
 
@@ -98,7 +103,7 @@ const actions = {
         };
         const result = await axios.post(url, data, apiConfig);
         if(result.data && result.status === StatusCodes.CREATED) {
-            commit('setCart', {
+            commit('setAlert', {
                 type: 'success',
                 message: 'Thanks for creating cart'
             });

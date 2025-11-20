@@ -29,29 +29,30 @@ use Doctrine\Persistence\ObjectRepository;
         }
     }
 
+    public function addOrderProductsFromCart (Order $order, int $cartId){
+        $cart = $this->cartManager->getRepository()->find($cartId);
+        if($cart){
+            foreach ($cart->getCartProducts()->getValues() as $cartProduct){
+                $orderProduct = new OrderProduct();
+                $orderProduct->setAppOrder($order);
+                $orderProduct->setQuantity($cartProduct->getQuantity());
+                $orderProduct->setPricePerOne($cartProduct->getProduct()->getPrice());
+                $orderProduct->setProduct($cartProduct->getProduct());
+                $order->addOrderProduct($orderProduct);
+                $this->entityManager->persist($orderProduct);
+            }
+        }
+    }
+
     public function createOrderFromCart(Cart $cart, User $user): void
     {
         $order = new Order();
         $order->setOwner($user);
         $order->setStatus(OrderStaticStorage::ORDER_STATUS_CREATED);
-        $orderTotalPrice = 0;
 
+        $this->addOrderProductsFromCart($order, $cart->getId());
+        $this->recalculateOrderTotalPrice($order);
 
-        foreach ($cart->getCartProducts()->getValues() as $cartProduct){
-            $orderProduct = new OrderProduct();
-            $orderProduct->setAppOrder($order);
-            $orderProduct->setQuantity($cartProduct->getQuantity());
-            $orderProduct->setPricePerOne($cartProduct->getProduct()->getPrice());
-            $orderProduct->setProduct($cartProduct->getProduct());
-
-            $orderTotalPrice += $orderProduct->getPricePerOne() * $orderProduct->getQuantity();
-
-            $order->addOrderProduct($orderProduct);
-            $this->entityManager->persist($orderProduct);
-
-        }
-
-        $order->setTotalPrice($orderTotalPrice);
         $order->setUpdatedAt(new \DateTimeImmutable());
 
         $this->entityManager->persist($order);
