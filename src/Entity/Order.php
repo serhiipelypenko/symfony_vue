@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Table(name: '`order`')]
 class Order
 {
-    #[Groups(['order:item'])]
+    #[Groups(['order:item','order:write'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -35,11 +35,11 @@ class Order
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
-    #[Groups(['order:item'])]
+    #[Groups(['order:item','order:write'])]
     #[ORM\Column]
     private ?int $status = null;
 
-    #[Groups(['order:item'])]
+    #[Groups(['order:item','order:write'])]
     #[ORM\Column(nullable: true)]
     private ?float $totalPrice = null;
 
@@ -52,7 +52,7 @@ class Order
     /**
      * @var Collection<int, OrderProduct>
      */
-    #[Groups(['order:item'])]
+    #[Groups(['order:item','order:write'])]
     #[ORM\OneToMany(targetEntity: OrderProduct::class, mappedBy: 'appOrder')]
     private Collection $orderProducts;
 
