@@ -7,7 +7,13 @@
     <div class="dropdown-menu cart-dropdown-window">
         <CartProductList />
         <CartTotalPrice />
-        <CartActions />
+        <div v-if="countCartProducts" >
+            <CartActions />
+        </div>
+        <div v-else class="text-center">
+            Your cart is empty.
+        </div>
+
     </div>
 
 
