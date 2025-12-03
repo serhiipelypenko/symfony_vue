@@ -28,14 +28,14 @@ const state = () => ({
 const getters = {
     totalPrice(state){
         let result = 0;
-        if(!state.cart.cartProducts){
-            return 0;
+
+        if(state.cart && state.cart.cartProducts){
+            state.cart.cartProducts.forEach(
+                cartProduct => {
+                    result += cartProduct.product.price * cartProduct.quantity;
+                }
+            );
         }
-        state.cart.cartProducts.forEach(
-            cartProduct => {
-                result += cartProduct.product.price * cartProduct.quantity;
-            }
-        );
 
         return result;
     }

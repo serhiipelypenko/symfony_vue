@@ -26,28 +26,31 @@ const state = () => ({
 const getters = {
     totalPrice(state){
         let result = 0;
-        if(!state.cart.cartProducts){
+        /*if(!state.cart && !state.cart.cartProducts){
             return 0;
+        }*/
+        if(state.cart && state.cart.cartProducts){
+            state.cart.cartProducts.forEach(
+                cartProduct => {
+                    result += cartProduct.product.price * cartProduct.quantity;
+                }
+            );
         }
-        state.cart.cartProducts.forEach(
-            cartProduct => {
-                result += cartProduct.product.price * cartProduct.quantity;
-            }
-        );
 
         return result;
     }
 };
 
 const actions = {
-    async getCart ({state, commit}) {
+    async getCart ({state, commit, dispatch}) {
         const url = state.staticStore.url.apiCart;
         const result = await axios.get(url, apiConfig);
 
-        if(result.data && result.status === StatusCodes.OK) {
+        if(result.data && result.status === StatusCodes.OK && result.data.member[0]) {
             //commit('setCart', result.data["hydra:member"]);
             commit('setCart', result.data.member[0]);
         }else{
+            dispatch('createCart');
             commit('setAlert', {
                 type: 'info',
                 message: 'Your cart is empty...'
@@ -78,6 +81,54 @@ const actions = {
             //commit('cleanAlert');
         }
     },
+
+    addCartProduct ({state, dispatch}, productData) {
+        const existCartProduct = state.cart.cartProducts.find(
+            cartProduct => cartProduct.product.uuid === productData.uuid
+        );
+
+        if(existCartProduct) {
+            dispatch('addExistCartProduct', existCartProduct);
+        }else{
+            dispatch('addNewCartProduct', productData);
+        }
+    },
+
+    async createCart({state,dispatch}){
+        const url = state.staticStore.url.apiCart
+        const result = await axios.post(url, {},apiConfig);
+        if(result.data && result.status === StatusCodes.CREATED) {
+            dispatch('getCart');
+        }
+    },
+
+    async addExistCartProduct({state, dispatch}, existCartProduct){
+        const url = concatUrlByParams(
+            state.staticStore.url.apiCartProduct,
+            existCartProduct.id
+        );
+
+        const data ={
+            "quantity": existCartProduct.quantity + 1
+        }
+        const result = await axios.patch(url, data, apiConfigPatch);
+        if(result.status === StatusCodes.OK) {
+            dispatch('getCart');
+        }
+    },
+
+    async addNewCartProduct({state, dispatch},productData){
+        const url = state.staticStore.url.apiCartProduct;
+        const data = {
+            //cart: "/api/carts/" + state.cart.id,
+            product: "/api/products/" + productData.uuid,
+            quantity: 1
+        };
+        const result = await axios.post(url, data, apiConfig);
+        if(result.data && result.status === StatusCodes.CREATED) {
+            dispatch('getCart');
+        }
+    }
 };
 
 const mutations = {

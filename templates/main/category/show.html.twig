@@ -67,6 +67,12 @@
             formData.append('productId', uuid);
            axios.post(urlSaveProductToCart, formData);
         }
+
+        /*function addProductToCart(uuid) {
+            window.vueMenuCartInstance.addCartProduct({
+                uuid
+            });
+        }*/
     </script>
 
 {% endblock %}
