@@ -1,0 +1,7 @@
+<h1>Ranked Choice Shop - Thank you for your purchase!</h1>
+
+<p>
+    {% for orderProduct in order.orderProducts %}
+        {{ orderProduct.product.title }}
+    {% enfor %}
+</p>

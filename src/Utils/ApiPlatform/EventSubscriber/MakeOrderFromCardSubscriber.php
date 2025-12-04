@@ -6,8 +6,10 @@ use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\Entity\Order;
 
 use App\Entity\StaticStorage\OrderStaticStorage;
+use App\Event\OrderCreatedFromCartEvent;
 use App\Utils\Manager\OrderManager;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
@@ -15,7 +17,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class MakeOrderFromCardSubscriber implements EventSubscriberInterface {
 
-    public function __construct(private Security $security, private OrderManager $orderManager)
+    public function __construct(private Security $security,
+        private OrderManager $orderManager,
+        private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -45,12 +49,25 @@ class MakeOrderFromCardSubscriber implements EventSubscriberInterface {
         $order->setStatus(OrderStaticStorage::ORDER_STATUS_CREATED);
     }
 
+    public function sendNotificationsAboutNewOrder(ViewEvent $event){
+        $order = $event->getControllerResult();
+        $method = $event->getRequest()->getMethod();
+        if(!$order instanceof Order || Request::METHOD_POST !== $method) {
+            return;
+        }
+
+        $this->eventDispatcher->dispatch(new OrderCreatedFromCartEvent($order));
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::VIEW => [
                 [
                     'makeOrder', EventPriorities::PRE_WRITE
+                ],
+                [
+                    'sendNotificationsAboutNewOrder', EventPriorities::PRE_WRITE
                 ]
             ]
         ];
