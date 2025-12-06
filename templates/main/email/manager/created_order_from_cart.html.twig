@@ -1,0 +1,7 @@
+<h1>Client created order</h1>
+
+<p>
+    {% for orderProduct in order.orderProducts %}
+        {{ orderProduct.product.title }}
+    {% enfor %}
+</p>

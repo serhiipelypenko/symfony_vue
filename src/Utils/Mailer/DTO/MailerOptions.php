@@ -5,7 +5,7 @@ namespace App\Utils\Mailer\DTO;
 class MailerOptions
 {
     private string $recipient;
-    private string $cc;
+    private ?string $cc;
     private string $subject;
     private string $htmlTemplate;
     private array $context;
@@ -22,7 +22,7 @@ class MailerOptions
         return $this;
     }
 
-    public function getCc(): string
+    public function getCc(): ?string
     {
         return $this->cc;
     }

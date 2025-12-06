@@ -4,9 +4,16 @@ namespace App\Utils\Mailer\Sender;
 
 use App\Entity\Order;
 use App\Utils\Mailer\DTO\MailerOptions;
+use App\Utils\Mailer\MailerSender;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class OrderCreatedFromCartEmailSender
 {
+    public function __construct(private MailerSender $mailerSender, private UrlGeneratorInterface $urlGenerator){
+
+    }
+
     public function sendEmailToClient(Order $order){
         $mailerOptions = (new MailerOptions())
             ->setRecipient($order->getOwner()->getEmail())
@@ -15,11 +22,20 @@ class OrderCreatedFromCartEmailSender
             ->setHtmlTemplate('main/email/client/created_order_from_cart.html.twig')
             ->setContext([
                 'order' => $order,
+                'profileUrl' => $this->urlGenerator->generate('main_profile_index', [], UrlGeneratorInterface::ABSOLUTE_URL),
             ]);
+        $this->mailerSender->sendTemplateEmail($mailerOptions);
     }
 
     public function sendEmailToManager(Order $order){
-
+        $mailerOptions = (new MailerOptions())
+            ->setRecipient('manager@ranked-choice.com')
+            ->setSubject('Client created order')
+            ->setHtmlTemplate('main/email/manager/created_order_from_cart.html.twig')
+            ->setContext([
+                'order' => $order,
+            ]);
+        $this->mailerSender->sendTemplateEmail($mailerOptions);
     }
 
 }
