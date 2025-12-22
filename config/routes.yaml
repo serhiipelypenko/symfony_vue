@@ -1,5 +1,43 @@
-controllers:
+index:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+    defaults:
+        #route: main_homepage
+        _locale: '%locale%'
+        permanent: true
+
+
+controller_admin:
+    prefix: /
     resource:
-        path: ../src/Controller/
-        namespace: App\Controller
+        path: ../src/Controller/Admin
+        namespace: App\Controller\Admin
     type: attribute
+
+controller_main:
+    prefix: /{_locale}
+    requirements:
+        _locale: en|uk|fr
+    resource:
+        path: ../src/Controller/Main
+        namespace: App\Controller\Main
+    type: attribute
+
+
+
+#controllers_main:
+#    resource:
+#        path: ../src/Controller/Main/
+#        namespace: App\Controller
+#    type: attribute
+#    prefix: /{_locale}
+#    requirements:
+#        _locale: '%app_locales%'
+#    defaults:
+#        _locale: '%locale%'
+
+#controllers_admin:
+#    resource:
+#        path: ../src/Controller/Admin/
+#        namespace: App\Controller
+#    type: attribute

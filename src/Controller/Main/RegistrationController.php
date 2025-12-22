@@ -23,7 +23,11 @@ class RegistrationController extends AbstractController
     {
     }
 
-    #[Route('/registration', name: 'main_registration')]
+    #[Route(path: [
+        'en' => '/registration',
+        'fr' => '/registration-france',
+        'uk' => '/registration-ukraine',
+    ], name: 'main_registration')]
     public function registration(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         if ($this->getUser()) {
