@@ -2,7 +2,7 @@ index:
     path: /
     controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
     defaults:
-        #route: main_homepage
+        route: main_homepage
         _locale: '%locale%'
         permanent: true
 

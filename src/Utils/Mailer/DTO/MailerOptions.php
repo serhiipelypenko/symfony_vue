@@ -5,7 +5,7 @@ namespace App\Utils\Mailer\DTO;
 class MailerOptions
 {
     private string $recipient;
-    private ?string $cc;
+    private ?string $cc = null;
     private string $subject;
     private string $htmlTemplate;
     private array $context;

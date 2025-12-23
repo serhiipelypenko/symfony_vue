@@ -4,6 +4,7 @@ namespace App\Controller\Main;
 
 use App\Entity\User;
 use App\Form\Main\RegistrationFormType;
+use App\Messenger\Message\Event\UserRegisteredEvent;
 use App\Repository\UserRepository;
 use App\Security\Verifier\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +12,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -28,7 +30,9 @@ class RegistrationController extends AbstractController
         'fr' => '/registration-france',
         'uk' => '/registration-ukraine',
     ], name: 'main_registration')]
-    public function registration(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function registration(Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $entityManager, MessageBusInterface $messageBus): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('main_profile_index');
@@ -48,16 +52,9 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('main_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('test@symfony-vue.com', 'TestName'))
-                    ->to((string) $user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('main/email/security/confirmation_email.html.twig')
-            );
+            $event = new UserRegisteredEvent($user->getId());
+            $messageBus->dispatch($event);
 
-            // do anything else you need here, like send an email
             $this->addFlash('success','An email has been sent to your registered email address.');
             return $this->redirectToRoute('main_homepage');
         }
