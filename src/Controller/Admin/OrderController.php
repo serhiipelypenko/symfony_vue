@@ -18,11 +18,13 @@ use Symfony\Component\Routing\Attribute\Route;
 final class OrderController extends AbstractController
 {
     #[Route('/list', name: 'list')]
-    public function list(OrderRepository $orderRepository): Response
+    public function list(Request $request, OrderFormHandler $orderFormHandler): Response
     {
-        $orders = $orderRepository->findBy(['isDeleted' => false], ['id' => 'DESC'],50);
+        $filterForm = null;
+        $pagination = $orderFormHandler->processOrderFiltersForm($request, $filterForm);
+
         return $this->render('admin/order/list.html.twig', [
-            'orders' => $orders,
+            'pagination' => $pagination,
             'orderStatusChoices' => OrderStaticStorage::getOrderStatusChoices(),
         ]);
     }
