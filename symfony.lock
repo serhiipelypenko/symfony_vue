@@ -109,6 +109,9 @@
             "bin/phpunit"
         ]
     },
+    "spiriitlabs/form-filter-bundle": {
+        "version": "v12.0.1"
+    },
     "stof/doctrine-extensions-bundle": {
         "version": "1.14",
         "recipe": {
