@@ -13,9 +13,27 @@ RUN apk add --no-cache \
     icu-dev \
     libzip-dev
 
+#RUN apk add --no-cache \
+#    chromium \
+#    chromium-chromedriver \
+#    unzip
+
+#ENV PANTHER_NO_SANDBOX=1 \
+#    PANTHER_CHROME_ARGUMENTS='--disable-dev-shm-usage --no-sandbox' \
+#    PANTHER_CHROME_BINARY=/usr/bin/chromium-browser
+
  RUN set -ex \
  && apk --no-cache add \
  postgresql-dev
+
+RUN apk add --no-cache \
+    chromium \
+    chromium-chromedriver \
+    unzip
+
+ENV PANTHER_NO_SANDBOX=1 \
+    PANTHER_CHROME_ARGUMENTS='--disable-dev-shm-usage --no-sandbox' \
+    PANTHER_CHROME_BINARY=/usr/bin/chromium-browser
 
 #####################################
 # PHP Extensions

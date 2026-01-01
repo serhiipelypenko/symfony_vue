@@ -1,0 +1,19 @@
+App\Entity\User:
+    user_1:
+        email: test_user1@gmail.com
+        # password decoded: user123  | add "\" before "$"
+        password: '\$2y\$13\$k.OFz6FSSXp9obNin90m2ukw4nY4ulMeWH4L2bqLAZR/K80SsXvXi'
+        isVerified: 1
+        roles: "[ROLE_USER]"
+    user_admin_1:
+        email: admin_1@ranked_choice.com
+        # password decoded: admin123  | add "\" before "$"
+        password: '\$2y\$13\$YGWj5./f0CGOBrwwp5voeOg9WmqhSZEhZfz434Xgg8Qld2TK7jTIq'
+        isVerified: 1
+        roles: "[ROLE_ADMIN]"
+    user_super_admin_1:
+        email: super_admin_1@ranked_choice.com
+        # password decoded: sadmin123  | add "\" before "$"
+        password: '\$2y\$13\$hjbxX1vsYPzQ/5c8J/MH7ew5MLF/SlQUQFtlJ6U0i4tiM5chlesXS '
+        isVerified: 1
+        roles: "[ROLE_SUPER_ADMIN]"
